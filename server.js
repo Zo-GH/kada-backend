@@ -4,6 +4,10 @@ const { config } = require('./config/config')
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
+const {
+  passengerRoutes
+} = require('./routes')
+
 const connect_database = require("./utils/db");
 
 const app = express();
@@ -14,6 +18,8 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: "50mb" }));
+
+app.use('/passenger', passengerRoutes)
 
 const PORT = config.PORT || 3000;
 

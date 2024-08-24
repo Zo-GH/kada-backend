@@ -1,16 +1,10 @@
+// adminValidation.js
 const Joi = require('joi');
+const baseUserValidation = require('./baseValidation');
 
-const adminValidation = (data) => {
-  const schema = Joi.object({
-    name: Joi.string().min(3).max(50).required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().min(8).required(),
-    phone: Joi.string().min(10).max(15).required(),
-    role: Joi.string().valid('admin', 'sudo').required(),
-    permissions: Joi.array().items(Joi.string().valid('manageUsers', 'manageDrivers', 'viewLogs')),
-  });
-
-  return schema.validate(data);
-};
+const adminValidation = Joi.object({
+  ...baseUserValidation,
+  permissions: Joi.array().items(Joi.string()).default(['manageUsers', 'manageDrivers', 'viewLogs']),
+});
 
 module.exports = adminValidation;

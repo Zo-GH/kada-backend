@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const rideSchema = new Schema({
-  passenger: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  passenger: { type: mongoose.Schema.Types.ObjectId, ref: 'Passenger', required: true },
   driver: { type: mongoose.Schema.Types.ObjectId, ref: 'Driver' },
   pickupLocation: {
     type: { type: String, enum: ['Point'], default: 'Point' },
