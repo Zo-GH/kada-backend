@@ -1,3 +1,6 @@
+const authRouter = require('./authRoutes');
+
 module.exports = {
-    passengerRoutes: require('./passengerRoutes')
+    passengerRoutes: require('./passengerRoutes'),
+    authRoutes: require('./authRoutes')
 }

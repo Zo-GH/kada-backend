@@ -12,7 +12,7 @@ const registerPassenger = async (req, res, next) => {
         data: passenger,
       });
     } catch (error) {
-      next(error);
+      errorHandler(error, req, res, next); 
     }
   }, passengerValidation);
 };
@@ -22,7 +22,7 @@ const getAllPassengers = async (req, res, next) => {
     const passengers = await PassengerService.getAllPassengers();
     res.status(200).json({ data: passengers });
   } catch (error) {
-    next(error);
+    errorHandler(error, req, res, next); 
   }
 };
 
@@ -30,11 +30,14 @@ const getPassengerById = async (req, res, next) => {
   try {
     const passenger = await PassengerService.getPassengerById(req.params.id);
     if (!passenger) {
-      return next(new errorHandler(404, "Passenger not found"));
+      const error = new Error("Passenger not found"); 
+      error.status = 404; 
+      errorHandler(error, req, res, next); 
+    } else {
+      res.status(200).json({ data: passenger });
     }
-    res.status(200).json({ data: passenger });
   } catch (error) {
-    next(error);
+    errorHandler(error, req, res, next); 
   }
 };
 
@@ -43,14 +46,17 @@ const updatePassenger = async (req, res, next) => {
     try {
       const passenger = await PassengerService.updatePassenger(req.params.id, req.body);
       if (!passenger) {
-        return next(new errorHandler(404, "Passenger not found"));
+        const error = new Error("Passenger not found"); // Create an error object
+        error.status = 404; // Set the status code
+        errorHandler(error, req, res, next); // Pass the error object to errorHandler
+      } else {
+        res.status(200).json({
+          message: "Passenger updated successfully",
+          data: passenger,
+        });
       }
-      res.status(200).json({
-        message: "Passenger updated successfully",
-        data: passenger,
-      });
     } catch (error) {
-      next(error);
+      errorHandler(error, req, res, next); // Pass the error object to errorHandler
     }
   }, updatePassengerValidation);
 };
@@ -59,11 +65,14 @@ const deletePassenger = async (req, res, next) => {
   try {
     const deletedPassenger = await PassengerService.deletePassenger(req.params.id);
     if (!deletedPassenger) {
-      return next(new errorHandler(404, "Passenger not found"));
+      const error = new Error("Passenger not found"); // Create an error object
+      error.status = 404; // Set the status code
+      errorHandler(error, req, res, next); // Pass the error object to errorHandler
+    } else {
+      res.status(200).json({ message: "Passenger deleted successfully" });
     }
-    res.status(200).json({ message: "Passenger deleted successfully" });
   } catch (error) {
-    next(error);
+    errorHandler(error, req, res, next); // Pass the error object to errorHandler
   }
 };
 

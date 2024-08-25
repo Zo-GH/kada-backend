@@ -10,6 +10,7 @@ class ENVs {
   BASEURL = process.env.BASEURL;
   OTHER_EMAILS = process.env.OTHER_EMAILS;
   PORT = process.env.PORT
+  JWT_SECRET = process.env.JWT_SECRET;
 }
 
 const config = new ENVs();

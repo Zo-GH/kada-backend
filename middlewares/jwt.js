@@ -1,19 +1,18 @@
 const jwt = require('jsonwebtoken');
-const config = require('../config/config'); // Contains your secret key and other configurations
+const { config } = require('../config/config');
+
 const Passenger = require('../models/Passenger');
 const Driver = require('../models/Driver');
 const Admin = require('../models/Admin');
 
-// Helper function to decode token
 const decodeToken = (token) => {
   try {
-    return jwt.verify(token, config.jwtSecret); // Use your secret key for verification
+    return jwt.verify(token, config.JWT_SECRET); 
   } catch (error) {
     throw new Error('Invalid token');
   }
 };
 
-// Function to get the current user based on token
 const getCurrentUser = async (req, res, next) => {
   try {
     const bearerToken = req.headers.authorization;
@@ -21,9 +20,9 @@ const getCurrentUser = async (req, res, next) => {
       return next(new Error('No token provided or token is invalid'));
     }
 
-    const token = bearerToken.split(' ')[1]; // Extract token from 'Bearer <token>'
-    const decodedToken = decodeToken(token);  // Decode the JWT to get user details
-    const { userId, role } = decodedToken;   // Extract userId and role from token
+    const token = bearerToken.split(' ')[1]; 
+    const decodedToken = decodeToken(token);  
+    const { userId, role } = decodedToken;  
 
     let user;
     if (role === 'passenger') {
@@ -38,14 +37,13 @@ const getCurrentUser = async (req, res, next) => {
       return next(new Error('User not found'));
     }
 
-    req.user = user; // Store user details in req object for further use
-    next(); // Pass control to next middleware or route handler
+    req.user = user; 
+    next(); 
   } catch (error) {
     next(error);
   }
 };
 
-// Middleware to authenticate and authorize based on roles
 const jwtMiddleware = (roles = []) => {
   // Convert single role to array for consistency
   if (typeof roles === 'string') {
@@ -71,7 +69,6 @@ const jwtMiddleware = (roles = []) => {
   ];
 };
 
-// Function to generate a JWT for a user
 const generateToken = (user) => {
   const payload = {
     userId: user._id,
@@ -79,7 +76,7 @@ const generateToken = (user) => {
   };
 
   // Token is valid for 30 days for a long-lasting login
-  return jwt.sign(payload, config.jwtSecret, { expiresIn: '30d' });
+  return jwt.sign(payload, config.JWT_SECRET, { expiresIn: '30d' });
 };
 
 module.exports = {

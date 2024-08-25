@@ -1,6 +1,10 @@
 const Passenger = require('../models/Passenger');
+const bcryptjs = require('bcryptjs')
 
 const createPassenger = async (data) => {
+    const hashedPassword = await bcryptjs.hash(data.password, 10); // 10 is the salt rounds
+    data.password = hashedPassword;
+
     const passenger = new Passenger(data);
     await passenger.save();
     return passenger;

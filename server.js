@@ -5,7 +5,8 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
 const {
-  passengerRoutes
+  passengerRoutes,
+  authRoutes
 } = require('./routes')
 
 const connect_database = require("./utils/db");
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: "50mb" }));
 
 app.use('/passenger', passengerRoutes)
+app.use('/auth', authRoutes)
 
 const PORT = config.PORT || 3000;
 
