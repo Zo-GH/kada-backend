@@ -3,6 +3,8 @@ const cors = require("cors");
 const { config } = require('./config/config')
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+const swaggerUi = require('swagger-ui-express')
+const swaggerSpec = require('./swaggerConfig')
 
 const {
   passengerRoutes,
@@ -19,6 +21,9 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: "50mb" }));
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+
 
 app.use('/passenger', passengerRoutes)
 app.use('/auth', authRoutes)
