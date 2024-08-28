@@ -18,6 +18,6 @@ const driverSchema = new mongoose.Schema({
   reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
 });
 
-const Driver = BaseUser.discriminator('Driver', driverSchema);
+const Driver = BaseUser.discriminator('rider', driverSchema);
 
 module.exports = Driver;

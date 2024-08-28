@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { config } = require('../config/config');
+const mongoose = require('mongoose');
+
 
 const Passenger = require('../models/Passenger');
 const Driver = require('../models/Driver');
@@ -21,28 +23,38 @@ const getCurrentUser = async (req, res, next) => {
     }
 
     const token = bearerToken.split(' ')[1]; 
-    const decodedToken = decodeToken(token);  
-    const { userId, role } = decodedToken;  
+    const decodedToken = decodeToken(token); 
+    console.log('Decoded Token:', decodedToken); 
+    const id = (decodedToken.id);
+    const role = decodedToken.role;
+ 
+    console.log('User ID:', id);
+    console.log('User Role:', role);
 
     let user;
+    const objectId = new mongoose.Types.ObjectId(id); // Ensure ObjectId is created correctly
+
     if (role === 'passenger') {
-      user = await Passenger.findById(userId);
+      user = await Passenger.findById(objectId);
     } else if (role === 'driver') {
-      user = await Driver.findById(userId);
+      user = await Driver.findById(objectId);
     } else if (role === 'admin') {
-      user = await Admin.findById(userId);
+      user = await Admin.findById(objectId);
     }
 
+    console.log('User:', user);
+
     if (!user) {
-      return next(new Error('User not found'));
+      return next(new Error('User not found')); // Pass the error to the next middleware
     }
 
     req.user = user; 
     next(); 
   } catch (error) {
-    next(error);
+    next(error); // Ensure errors are passed to the next middleware
   }
 };
+
 
 const jwtMiddleware = (roles = []) => {
   // Convert single role to array for consistency
@@ -56,28 +68,37 @@ const jwtMiddleware = (roles = []) => {
         // Use getCurrentUser to verify and get user
         await getCurrentUser(req, res, next);
 
+        if (!req.user) {
+          return next(new Error('User not found'));
+        }
+
         // Check if the role matches (if roles are provided)
         if (roles.length && !roles.includes(req.user.role)) {
+          console.log('Roles:', roles);
+          console.log('User Role:', req.user.role);
+
           return next(new Error('Unauthorized'));
         }
 
-        next(); // If authorized, proceed to the next middleware or route handler
+        console.log('Role matches!');
+         // If authorized, proceed to the next middleware or route handler
       } catch (error) {
-        next(error);
+        console.log('Error in jwtMiddleware:', error);
+        next(error); // Ensure errors are passed to the next middleware
       }
     },
   ];
 };
 
+
 const generateToken = (user) => {
   const payload = {
-    userId: user._id,
+    id: user._id,
     role: user.role,
   };
-
-  // Token is valid for 30 days for a long-lasting login
   return jwt.sign(payload, config.JWT_SECRET, { expiresIn: '30d' });
 };
+
 
 module.exports = {
   jwtMiddleware,

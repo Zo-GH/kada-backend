@@ -5,6 +5,6 @@ const adminSchema = new mongoose.Schema({
   permissions: { type: [String], default: ['manageUsers', 'manageDrivers', 'viewLogs'] },
 });
 
-const Admin = BaseUser.discriminator('Admin', adminSchema);
+const Admin = BaseUser.discriminator('admin', adminSchema);
 
 module.exports = Admin;

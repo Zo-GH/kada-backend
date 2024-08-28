@@ -10,6 +10,6 @@ const passengerSchema = new mongoose.Schema({
   paymentMethod: { type: mongoose.Schema.Types.ObjectId, ref: 'Payment' },
 });
 
-const Passenger = BaseUser.discriminator('Passenger', passengerSchema);
+const Passenger = BaseUser.discriminator('passenger', passengerSchema);
 
 module.exports = Passenger;

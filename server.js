@@ -8,7 +8,8 @@ const swaggerSpec = require('./swaggerConfig')
 
 const {
   passengerRoutes,
-  authRoutes
+  authRoutes,
+  rideRoutes
 } = require('./routes')
 
 const connect_database = require("./utils/db");
@@ -21,12 +22,17 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: "50mb" }));
+app.use((err, req, res, next) => {
+  console.error('Error Handler:', err.message);
+  res.status(500).json({ message: err.message });
+});
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 
 app.use('/passenger', passengerRoutes)
 app.use('/auth', authRoutes)
+app.use('/rides', rideRoutes)
 
 const PORT = config.PORT || 3000;
 
