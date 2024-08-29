@@ -1,0 +1,380 @@
+[
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "rideId",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "customer",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "rider",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "fare",
+                "type": "uint256"
+            }
+        ],
+        "name": "RideBooked",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "transactionId",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "customer",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "rideId",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "RidePaid",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_rider",
+                "type": "address"
+            },
+            {
+                "internalType": "string",
+                "name": "_startLocation",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_endLocation",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_fare",
+                "type": "uint256"
+            }
+        ],
+        "name": "bookRide",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "customerRideHistory",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_customer",
+                "type": "address"
+            }
+        ],
+        "name": "getCustomerRideHistory",
+        "outputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_rideId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getRideDetails",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "rideId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "rider",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "customer",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "fare",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "startLocation",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "endLocation",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "timestamp",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "bool",
+                        "name": "completed",
+                        "type": "bool"
+                    }
+                ],
+                "internalType": "struct Kada.Ride",
+                "name": "",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_transactionId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getTransactionDetails",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "transactionId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "customer",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "rideId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "amount",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "timestamp",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct Kada.Transaction",
+                "name": "",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "nextRideId",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "nextTransactionId",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_rideId",
+                "type": "uint256"
+            }
+        ],
+        "name": "payForRide",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "rides",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "rideId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "rider",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "customer",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "fare",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "startLocation",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "endLocation",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "completed",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "transactions",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "transactionId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "customer",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "rideId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]
