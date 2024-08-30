@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const BaseUser = require('./BaseUser');
+const locationSchema = require('./Location');
 
 const driverSchema = new mongoose.Schema({
   location: {
-    type: { type: String, enum: ['Point'], default: 'Point' },
-    coordinates: { type: [Number], required: true },
+    type: locationSchema,
   },
   vehicleDetails: {
     carModel: { type: String, required: true },

@@ -8,12 +8,13 @@ const requestRide = async (req, res, next) => {
     try {
         console.log('Passenger ID from token:', req.user._id);
         
-        if (!req.body.pickupLocation || !req.body.dropoffLocation || !req.body.fare) {
-            return res.status(400).json({ message: 'Missing required fields' });
+        const { error } = rideValidation.validate(req.body);
+        if (error) {
+            return res.status(400).json({ message: error.details[0].message });
         }
         
         const rideData = {
-            passenger: req.user._id,  // Use the authenticated user's ID as the passenger
+            passenger: req.user._id,  
             pickupLocation: req.body.pickupLocation,
             dropoffLocation: req.body.dropoffLocation,
             fare: req.body.fare,

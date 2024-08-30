@@ -1,12 +1,10 @@
 const Joi = require('joi');
 const baseUserValidation = require('./baseValidation');
+const locationValidation = require('./locationValidation')
 
 const passengerValidation = Joi.object({
   ...baseUserValidation,
-  location: Joi.object({
-    type: Joi.string().valid('Point').required(),
-    coordinates: Joi.array().items(Joi.number()).length(2).required(),
-  }),
+  location: locationValidation,
   rideHistory: Joi.array().items(Joi.string().hex().length(24)), 
   paymentMethod: Joi.string().hex().length(24), 
 });

@@ -9,7 +9,8 @@ const swaggerSpec = require('./swaggerConfig')
 const {
   passengerRoutes,
   authRoutes,
-  rideRoutes
+  rideRoutes,
+  driverRoutes,
 } = require('./routes')
 
 const connect_database = require("./utils/db");
@@ -31,6 +32,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 
 app.use('/passenger', passengerRoutes)
+app.use('/rider', driverRoutes)
 app.use('/auth', authRoutes)
 app.use('/rides', rideRoutes)
 

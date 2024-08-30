@@ -1,16 +1,17 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const locationSchema = require('./Location');
 
 const rideSchema = new Schema({
   passenger: { type: mongoose.Schema.Types.ObjectId, ref: 'passenger', required: true },
   driver: { type: mongoose.Schema.Types.ObjectId, ref: 'rider' },
   pickupLocation: {
-    type: { type: String, enum: ['Point'], default: 'Point' },
-    coordinates: { type: [Number], required: true },
+    type: locationSchema,
+    required: true,
   },
   dropoffLocation: {
-    type: { type: String, enum: ['Point'], default: 'Point' },
-    coordinates: { type: [Number], required: true },
+    type: locationSchema,
+    required: true,
   },
   status: {
     type: String,
@@ -23,6 +24,5 @@ const rideSchema = new Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-rideSchema.index({ pickupLocation: '2dsphere', dropoffLocation: '2dsphere' });
 
 module.exports = mongoose.model('Ride', rideSchema);

@@ -17,8 +17,8 @@ const getAllRidesByPassenger = async (passengerId) => {
 // Get ride by ID
 const getRideById = async (id) => {
     return await Ride.findById(id)
-      .populate('passenger', 'name email') 
-      // .populate('rider', 'name email');   
+      .populate('passenger', 'name email')
+      .populate('driver', 'name email');   
 };
 
 
