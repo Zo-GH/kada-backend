@@ -11,7 +11,7 @@ const DriverController = require('../controllers/driverController');
 
 /**
  * @swagger
- * /drivers:
+ * /rider/drivers:
  *   post:
  *     summary: Register a new driver
  *     tags: [Drivers]
@@ -49,7 +49,7 @@ driverRouter.post('/drivers', DriverController.registerDriver);
 
 /**
  * @swagger
- * /drivers:
+ * /rider/drivers:
  *   get:
  *     summary: Get all drivers
  *     tags: [Drivers]
@@ -63,7 +63,7 @@ driverRouter.get('/drivers', DriverController.getAllDrivers);
 
 /**
  * @swagger
- * /drivers/{id}:
+ * /rider/drivers/{id}:
  *   get:
  *     summary: Get driver by ID
  *     tags: [Drivers]
@@ -86,7 +86,7 @@ driverRouter.get('/drivers/:id', DriverController.getDriverById);
 
 /**
  * @swagger
- * /drivers/{id}:
+ * /rider/drivers/{id}:
  *   patch:
  *     summary: Update driver details by ID
  *     tags: [Drivers]
@@ -127,7 +127,7 @@ driverRouter.patch('/drivers/:id', DriverController.updateDriver);
 
 /**
  * @swagger
- * /drivers/{id}:
+ * /rider/drivers/{id}:
  *   delete:
  *     summary: Delete driver by ID
  *     tags: [Drivers]
@@ -150,7 +150,7 @@ driverRouter.delete('/drivers/:id', DriverController.deleteDriver);
 
 /**
  * @swagger
- * /rides/{rideId}/driver/{driverId}:
+ * /rider/rides/{rideId}/driver/{driverId}:
  *   put:
  *     summary: Assign driver to a ride
  *     tags: [Drivers]
