@@ -5,17 +5,18 @@ const abi = require("../utils/abi.json");
 require("dotenv").config();
 
 
-const provider = new ethers.providers.JsonRpcProvider(process.env.ALCHEMY_URL);
-const privateKey = process.env.privateKey;
-const wallet = new ethers.Wallet(privateKey, provider);
+// const provider = new ethers.providers.JsonRpcProvider(process.env.ALCHEMY_URL);
+// const privateKey = process.env.privateKey;
+// const wallet = new ethers.Wallet(privateKey, provider);
 const contractAddress = process.env.contractAddress;
 
-const kadaContract = new ethers.Contract(contractAddress, abi, wallet);
 
 // Controller for booking a ride
 const bookRide = async (req, res, next) => {
     requestMiddleware(req, res, next, async () => {
-        const { rider, startLocation, endLocation, fare } = req.body;
+        const { rider, startLocation, endLocation, fare, signer } = req.body;
+
+        const kadaContract = new ethers.Contract(contractAddress, abi, signer);
 
         try {
             const tx = await kadaContract.bookRide(rider, startLocation, endLocation, ethers.utils.parseEther(fare.toString()));
@@ -33,7 +34,10 @@ const bookRide = async (req, res, next) => {
 // Controller for paying for a ride
 const payForRide = async (req, res, next) => {
     requestMiddleware(req, res, next, async () => {
-        const { rideId } = req.body;
+        const { rideId, signer } = req.body;
+
+        const kadaContract = new ethers.Contract(contractAddress, abi, signer);
+
 
         try {
             const tx = await kadaContract.payForRide(rideId, {
@@ -53,6 +57,8 @@ const payForRide = async (req, res, next) => {
 // Controller for getting ride details
 const getRideDetails = async (req, res, next) => {
     try {
+        const {signer} = req.body;
+        const kadaContract = new ethers.Contract(contractAddress, abi, signer);
         const rideId = req.params.id;
         const ride = await kadaContract.getRideDetails(rideId);
         res.status(200).json({ data: ride });
@@ -64,6 +70,8 @@ const getRideDetails = async (req, res, next) => {
 // Controller for getting a customer's ride history
 const getCustomerRideHistory = async (req, res, next) => {
     try {
+        const {signer} = req.body;
+        const kadaContract = new ethers.Contract(contractAddress, abi, signer);
         const customer = req.params.customer;
         const history = await kadaContract.getCustomerRideHistory(customer);
         res.status(200).json({ data: history });
@@ -75,6 +83,8 @@ const getCustomerRideHistory = async (req, res, next) => {
 // Controller for getting transaction details
 const getTransactionDetails = async (req, res, next) => {
     try {
+        const {signer} = req.body;
+        const kadaContract = new ethers.Contract(contractAddress, abi, signer);
         const transactionId = req.params.id;
         const transaction = await kadaContract.getTransactionDetails(transactionId);
         res.status(200).json({ data: transaction });
