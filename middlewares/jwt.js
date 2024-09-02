@@ -36,7 +36,7 @@ const getCurrentUser = async (req, res, next) => {
 
     if (role === 'passenger') {
       user = await Passenger.findById(objectId);
-    } else if (role === 'driver') {
+    } else if (role === 'rider') {
       user = await Driver.findById(objectId);
     } else if (role === 'admin') {
       user = await Admin.findById(objectId);

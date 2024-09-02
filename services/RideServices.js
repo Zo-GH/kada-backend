@@ -13,6 +13,11 @@ const getAllRidesByPassenger = async (passengerId) => {
     return await Ride.find({ passenger: passengerId }).sort({ createdAt: -1 });
 };
 
+const getAllRidesByDriver = async (driverId) => {
+    return await Ride.find({ driver: driverId }).sort({ createdAt: -1  });
+};
+
+
 
 // Get ride by ID
 const getRideById = async (id) => {
@@ -36,6 +41,7 @@ const deleteRide = async (id) => {
 module.exports = {
     createRide,
     getAllRidesByPassenger,
+    getAllRidesByDriver,
     getRideById,
     updateRide,
     deleteRide

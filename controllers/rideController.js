@@ -62,16 +62,32 @@ const getRideById = async (req, res, next) => {
 
         // Ensure only the passenger or driver assigned to the ride can view it
         console.log('passenger id associated with the given ride...', ride.passenger._id.toString())
+        console.log('rider id associated with the given ride...', ride.driver._id.toString())
         console.log('passenger id of the logged in user...', req.user._id.toString())
-        if (ride.passenger._id.toString() !== req.user._id.toString() ) {
+        if (!(ride.passenger._id.toString() === req.user._id.toString() || ride.driver._id.toString() === req.user._id.toString())) {
             return res.status(403).json({ message: "Access denied" });
-        }
+          }          
 
         res.status(200).json({ data: ride });
     } catch (error) {
         next(error);
     }
 };
+
+const getRidesForDriver = async (req, res, next) => {
+    try {
+        const driverId = req.user ? req.user._id : null; 
+        if (!driverId) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        const rides = await RideService.getAllRidesByDriver(driverId);
+        res.status(200).json({ data: rides });
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 
 // Update ride status by ID
@@ -83,9 +99,9 @@ const updateRideStatus = async (req, res, next) => {
         }
 
         // Ensure that only the passenger or driver can update the ride
-        if (ride.passenger.toString() !== req.user._id && ride.driver.toString() !== req.user._id) {
+        if (!(ride.passenger._id.toString() === req.user._id.toString() || ride.driver._id.toString() === req.user._id.toString())) {
             return res.status(403).json({ message: "Access denied" });
-        }
+          }          
 
         // Perform the update
         const updatedRide = await RideService.updateRide(req.params.id, req.body);
@@ -120,6 +136,7 @@ const cancelRide = async (req, res, next) => {
 module.exports = {
     requestRide,
     getRidesForPassenger,
+    getRidesForDriver,
     getRideById,
     updateRideStatus,
     cancelRide
