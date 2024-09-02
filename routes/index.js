@@ -4,5 +4,6 @@ module.exports = {
     passengerRoutes: require('./passengerRoutes'),
     authRoutes: require('./authRoutes'),
     rideRoutes: require('./rideRoutes'),
-    driverRoutes: require('./driverRoutes')
+    driverRoutes: require('./driverRoutes'),
+    contractRideRoutes: require('./contractRideRoutes.js')
 }
