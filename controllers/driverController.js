@@ -3,7 +3,6 @@ const requestMiddleware = require('../middlewares/requestMiddleware');
 const { driverValidation, updateRiderValidation } = require('../validation/driverValidation');
 const errorHandler = require('../middlewares/errorHandler');
 
-// Register a new driver
 const registerDriver = async (req, res, next) => {
   requestMiddleware(req, res, next, async () => {
     try {
@@ -43,7 +42,6 @@ const getDriverById = async (req, res, next) => {
   }
 };
 
-// Update driver by ID
 const updateDriver = async (req, res, next) => {
   requestMiddleware(req, res, next, async () => {
     try {
@@ -63,7 +61,6 @@ const updateDriver = async (req, res, next) => {
   }, updateRiderValidation);
 };
 
-// Delete driver by ID
 const deleteDriver = async (req, res, next) => {
   try {
     const deletedDriver = await DriverService.deleteDriver(req.params.id);
@@ -78,7 +75,6 @@ const deleteDriver = async (req, res, next) => {
   }
 };
 
-// Assign driver to a ride
 const assignDriverToRide = async (req, res, next) => {
   try {
     const ride = await DriverService.assignDriverToRide(req.params.rideId, req.params.driverId);
@@ -91,6 +87,24 @@ const assignDriverToRide = async (req, res, next) => {
   }
 };
 
+const toggleAvailability = async (req, res, next) => {
+  try {
+    console.log('Request body:', req.body);
+    const driverId = req.user._id; 
+    console.log('driver _id', driverId)
+    const { isOnline } = req.body; 
+
+    const updatedDriver = await DriverService.toggleDriverAvailability(driverId, isOnline);
+    res.status(200).json({
+      message: `Driver is now ${isOnline ? 'online' : 'offline'}`,
+      data: updatedDriver
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 module.exports = {
   registerDriver,
   getAllDrivers,
@@ -98,4 +112,5 @@ module.exports = {
   updateDriver,
   deleteDriver,
   assignDriverToRide,
+  toggleAvailability,
 };

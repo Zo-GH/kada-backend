@@ -5,7 +5,7 @@ const baseUserValidation = {
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
   phone: Joi.string().pattern(/^[+]?[0-9]{10,15}$/).required(),
-  role: Joi.string().valid('passenger', 'driver', 'admin'),
+  role: Joi.string().valid('passenger', 'rider', 'admin'),
   isVerified: Joi.boolean().default(false),
 };
 

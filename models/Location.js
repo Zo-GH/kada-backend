@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const locationSchema = new mongoose.Schema({
   type: {
     type: String,
-    enum: ['Point'],  // GeoJSON type
+    enum: ['Point'], 
     required: true,
     default: 'Point',
   },

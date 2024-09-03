@@ -46,9 +46,9 @@ const updatePassenger = async (req, res, next) => {
     try {
       const passenger = await PassengerService.updatePassenger(req.params.id, req.body);
       if (!passenger) {
-        const error = new Error("Passenger not found"); // Create an error object
-        error.status = 404; // Set the status code
-        errorHandler(error, req, res, next); // Pass the error object to errorHandler
+        const error = new Error("Passenger not found"); 
+        error.status = 404; 
+        errorHandler(error, req, res, next); 
       } else {
         res.status(200).json({
           message: "Passenger updated successfully",
@@ -56,7 +56,7 @@ const updatePassenger = async (req, res, next) => {
         });
       }
     } catch (error) {
-      errorHandler(error, req, res, next); // Pass the error object to errorHandler
+      errorHandler(error, req, res, next); 
     }
   }, updatePassengerValidation);
 };
@@ -65,14 +65,14 @@ const deletePassenger = async (req, res, next) => {
   try {
     const deletedPassenger = await PassengerService.deletePassenger(req.params.id);
     if (!deletedPassenger) {
-      const error = new Error("Passenger not found"); // Create an error object
-      error.status = 404; // Set the status code
-      errorHandler(error, req, res, next); // Pass the error object to errorHandler
+      const error = new Error("Passenger not found"); 
+      error.status = 404; 
+      errorHandler(error, req, res, next); 
     } else {
       res.status(200).json({ message: "Passenger deleted successfully" });
     }
   } catch (error) {
-    errorHandler(error, req, res, next); // Pass the error object to errorHandler
+    errorHandler(error, req, res, next); 
   }
 };
 

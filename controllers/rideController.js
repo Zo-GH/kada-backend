@@ -2,8 +2,8 @@ const RideService = require('../services/RideServices');
 const requestMiddleware = require('../middlewares/requestMiddleware');
 const rideValidation = require('../validation/rideValidation')
 const errorHandler = require('../middlewares/errorHandler');
+const Passenger = require('../models/Passenger')
 
-// Request a new ride
 const requestRide = async (req, res, next) => {
     try {
         console.log('Passenger ID from token:', req.user._id);
@@ -22,6 +22,17 @@ const requestRide = async (req, res, next) => {
         console.log('Ride data being saved:', rideData);
 
         const ride = await RideService.createRide(rideData);
+        console.log('Created ride:', ride);
+
+        const passenger = await Passenger.findById(req.user._id);
+        if (passenger) {
+            console.log('Passenger found:', passenger);
+            passenger.rideHistory.push(ride._id);
+            console.log('Updated rideHistory:', passenger.rideHistory);
+            await passenger.save();
+        } else {
+            return res.status(404).json({ message: 'Passenger not found' });
+        }
 
         res.status(201).json({
             message: "Ride requested successfully",
@@ -35,7 +46,6 @@ const requestRide = async (req, res, next) => {
 
   
 
-// Get all rides for a passenger
 const getRidesForPassenger = async (req, res, next) => {
     try {
         const passengerId = req.user ? req.user._id : null; 
@@ -51,7 +61,6 @@ const getRidesForPassenger = async (req, res, next) => {
 };
 
 
-// Get ride details by ID
 const getRideById = async (req, res, next) => {
     try {
         const ride = await RideService.getRideById(req.params.id);
@@ -60,7 +69,6 @@ const getRideById = async (req, res, next) => {
             return res.status(404).json({ message: "Ride not found" });
         }
 
-        // Ensure only the passenger or driver assigned to the ride can view it
         console.log('passenger id associated with the given ride...', ride.passenger._id.toString())
         console.log('rider id associated with the given ride...', ride.driver._id.toString())
         console.log('passenger id of the logged in user...', req.user._id.toString())
@@ -90,7 +98,6 @@ const getRidesForDriver = async (req, res, next) => {
 
 
 
-// Update ride status by ID
 const updateRideStatus = async (req, res, next) => {
     try {
         const ride = await RideService.getRideById(req.params.id);
@@ -98,12 +105,10 @@ const updateRideStatus = async (req, res, next) => {
             return res.status(404).json({ message: "Ride not found" });
         }
 
-        // Ensure that only the passenger or driver can update the ride
         if (!(ride.passenger._id.toString() === req.user._id.toString() || ride.driver._id.toString() === req.user._id.toString())) {
             return res.status(403).json({ message: "Access denied" });
           }          
 
-        // Perform the update
         const updatedRide = await RideService.updateRide(req.params.id, req.body);
         res.status(200).json({ message: "Ride status updated successfully", data: updatedRide });
     } catch (error) {
@@ -112,7 +117,6 @@ const updateRideStatus = async (req, res, next) => {
 };
 
 
-// Cancel ride (delete ride by ID)
 const cancelRide = async (req, res, next) => {
     try {
         const ride = await RideService.getRideById(req.params.id);
@@ -120,7 +124,6 @@ const cancelRide = async (req, res, next) => {
             return res.status(404).json({ message: "Ride not found" });
         }
 
-        // Ensure that only the passenger or driver can cancel the ride
         if (ride.passenger.toString() !== req.user._id && ride.driver.toString() !== req.user._id) {
             return res.status(403).json({ message: "Access denied" });
         }

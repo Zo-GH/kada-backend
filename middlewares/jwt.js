@@ -32,7 +32,7 @@ const getCurrentUser = async (req, res, next) => {
     console.log('User Role:', role);
 
     let user;
-    const objectId = new mongoose.Types.ObjectId(id); // Ensure ObjectId is created correctly
+    const objectId = new mongoose.Types.ObjectId(id);
 
     if (role === 'passenger') {
       user = await Passenger.findById(objectId);
@@ -45,7 +45,7 @@ const getCurrentUser = async (req, res, next) => {
     console.log('User:', user);
 
     if (!user) {
-      return next(new Error('User not found')); // Pass the error to the next middleware
+      return next(new Error('User not found'));
     }
 
     req.user = user; 

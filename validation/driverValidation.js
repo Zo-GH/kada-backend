@@ -12,10 +12,20 @@ const driverValidation = Joi.object({
     insuranceNumber: Joi.string(),
     licenseStatus: Joi.boolean().default(false),
   }).required(),
-  rideHistory: Joi.array().items(Joi.string().hex().length(24)), // Reference to Ride IDs
-  isOnline: Joi.boolean().default(false),
-  rating: Joi.number().min(0).max(5).default(0),
-  reviews: Joi.array().items(Joi.string().hex().length(24)), // Reference to Review IDs
+  rideHistory: Joi.array().items(Joi.object({
+    rideId: Joi.string().required(),
+    status: Joi.string().valid('inProgress', 'completed', 'canceled').required()
+  })).optional(),
+  availability: Joi.object({
+    isOnline: Joi.boolean().default(false),
+    currentActivity: Joi.string().valid('available', 'onRide', 'unavailable').default('available')
+  }).optional(),
+  ratings: Joi.array().items(Joi.string()).optional(),
+  activityLogs: Joi.array().items(Joi.object({
+    action: Joi.string().required(),
+    timestamp: Joi.date().default(Date.now),
+    details: Joi.object().optional()
+  })).optional()
 });
 
 const updateRiderValidation = Joi.object({
@@ -23,9 +33,7 @@ const updateRiderValidation = Joi.object({
   email: Joi.string().email(),
   password: Joi.string().min(6),
   phone: Joi.string(),
-  location: Joi.object({
-    coordinates: Joi.array().items(Joi.number()),
-  }),
+  location: locationValidation,
   isVerified: Joi.boolean(),
   vehicleDetails: Joi.object({
     carModel: Joi.string().required(),
@@ -33,8 +41,20 @@ const updateRiderValidation = Joi.object({
     insuranceNumber: Joi.string(),
     licenseStatus: Joi.boolean(),
   }),
-  isOnline: Joi.boolean(),
-  rating: Joi.number(),
+  rideHistory: Joi.array().items(Joi.object({
+    rideId: Joi.string().required(),
+    status: Joi.string().valid('inProgress', 'completed', 'canceled').required()
+  })).optional(),
+  availability: Joi.object({
+    isOnline: Joi.boolean().default(false),
+    currentActivity: Joi.string().valid('available', 'onRide', 'unavailable').default('available')
+  }).optional(),
+  ratings: Joi.array().items(Joi.string()).optional(),
+  activityLogs: Joi.array().items(Joi.object({
+    action: Joi.string().required(),
+    timestamp: Joi.date().default(Date.now),
+    details: Joi.object().optional()
+  })).optional()
 });
 
 

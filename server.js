@@ -12,6 +12,7 @@ const {
   rideRoutes,
   driverRoutes,
   contractRideRoutes,
+  ratingsRoutes,
 } = require('./routes')
 
 const connect_database = require("./utils/db");
@@ -37,6 +38,7 @@ app.use('/rider', driverRoutes)
 app.use('/auth', authRoutes)
 app.use('/rides', rideRoutes)
 app.use('/contract', contractRideRoutes)
+app.use('/ratings', ratingsRoutes)
 
 const PORT = config.PORT || 3000;
 

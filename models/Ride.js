@@ -19,6 +19,8 @@ const rideSchema = new Schema({
     default: 'requested',
   },
   fare: { type: Number, required: true },
+  ratings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rating' }], 
+  reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }] ,
   paymentStatus: { type: String, enum: ['pending', 'paid'], default: 'pending' },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

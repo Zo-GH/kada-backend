@@ -11,6 +11,37 @@ const DriverController = require('../controllers/driverController');
 
 /**
  * @swagger
+ * /rider/availability:
+ *   patch:
+ *     summary: Toggle driver availability status
+ *     tags: [Drivers]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               isOnline:
+ *                 type: boolean
+ *                 description: Set true if driver is going online, false if going offline.
+ *     responses:
+ *       200:
+ *         description: Driver availability status updated successfully
+ *       400:
+ *         description: Invalid request body
+ *       404:
+ *         description: Driver not found
+ *       500:
+ *         description: Internal server error
+ */
+driverRouter.patch('/availability', jwtMiddleware(['rider']), DriverController.toggleAvailability);
+
+
+/**
+ * @swagger
  * /rider/drivers:
  *   post:
  *     summary: Register a new driver

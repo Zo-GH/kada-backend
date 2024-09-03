@@ -1,5 +1,4 @@
 const errorHandler = (err, req, res, next) => {
-  // Avoid sending multiple responses
   if (res.headersSent) {
     return;
   }
@@ -7,7 +6,6 @@ const errorHandler = (err, req, res, next) => {
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Internal Server Error';
 
-  // Custom handling for different error types
   if (err.name === 'ValidationError') {
     statusCode = 400;
     const validationErrors = Object.values(err.errors).map((val) => val.message);
@@ -39,7 +37,6 @@ const errorHandler = (err, req, res, next) => {
     message = 'Duplicate entry';
   }
 
-  // Send the error response
   res.status(statusCode).json({
     success: false,
     status: statusCode,

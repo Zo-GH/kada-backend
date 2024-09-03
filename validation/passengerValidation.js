@@ -14,9 +14,7 @@ const updatePassengerValidation = Joi.object({
   email: Joi.string().email(),
   password: Joi.string().min(6),
   phone: Joi.string(),
-  location: Joi.object({
-      coordinates: Joi.array().items(Joi.number()),
-  }),
+  location: locationValidation,
   isVerified: Joi.boolean(),
 });
 

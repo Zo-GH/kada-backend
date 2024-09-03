@@ -47,8 +47,7 @@ const login = async (req, res, next) => {
 // Logout Controller
 const logout = async (req, res, next) => {
     try {
-        // JWT-based logout is handled by the client-side deleting the token.
-        // Just return a success message here.
+
         res.status(200).json({ message: 'Logout successful' });
     } catch (error) {
         next(error);

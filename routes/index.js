@@ -5,5 +5,6 @@ module.exports = {
     authRoutes: require('./authRoutes'),
     rideRoutes: require('./rideRoutes'),
     driverRoutes: require('./driverRoutes'),
-    contractRideRoutes: require('./contractRideRoutes.js')
+    contractRideRoutes: require('./contractRideRoutes.js'),
+    ratingsRoutes: require('./ratingRoutes.js')
 }
