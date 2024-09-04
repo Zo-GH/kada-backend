@@ -96,7 +96,7 @@ const generateToken = (user) => {
     id: user._id,
     role: user.role,
   };
-  return jwt.sign(payload, config.JWT_SECRET, { expiresIn: '30d' });
+  return jwt.sign(payload, config.JWT_SECRET, { expiresIn: '60d' });
 };
 
 

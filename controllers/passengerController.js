@@ -2,17 +2,29 @@ const PassengerService = require('../services/passengerService');
 const requestMiddleware = require('../middlewares/requestMiddleware');
 const { passengerValidation, updatePassengerValidation } = require('../validation/passengerValidation');
 const errorHandler = require('../middlewares/errorHandler');
+const { generateToken } = require('../middlewares/jwt');
+
 
 const registerPassenger = async (req, res, next) => {
   requestMiddleware(req, res, next, async () => {
     try {
       const passenger = await PassengerService.createPassenger(req.body);
+
+      const token = generateToken(passenger);
+
       res.status(201).json({
-        message: "Passenger registered successfully",
-        data: passenger,
+        message: "Passenger registered and logged in successfully",
+        token,
+        user: {
+          id: passenger._id,
+          name: passenger.name,
+          email: passenger.email,
+          phone: passenger.phone,
+          role: passenger.role, 
+        },
       });
     } catch (error) {
-      errorHandler(error, req, res, next); 
+      errorHandler(error, req, res, next);
     }
   }, passengerValidation);
 };

@@ -14,17 +14,21 @@
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "ethers": "^6.13.2",
     "express": "^4.19.2",
     "express-validator": "^7.2.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
+    "mailgun-js": "^0.22.0",
     "mongoose": "^8.5.3",
+    "nodemailer": "^6.9.15",
     "nodemon": "^3.1.4",
     "socket.io": "^4.7.5",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "twilio": "^5.2.3"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8",
