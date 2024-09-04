@@ -23,13 +23,22 @@ const rateDriver = async (passengerId, driverId, rideId, ratingData) => {
     { new: true }
   ).populate('ratings');
 
-  const totalRating = driver.ratings.reduce((sum, r) => sum + r.riderRating, 0);
-  const averageRating = totalRating / driver.ratings.length;
+  console.log('rider ratings...', riderRating)
+
+  const validRatings = driver.ratings.filter(r => typeof r.riderRating === 'number');
+  const totalRating = validRatings.reduce((sum, r) => sum + r.riderRating, 0);
+  const averageRating = validRatings.length > 0 ? totalRating / validRatings.length : null;
+
+  console.log('total ratings...', totalRating)
+  console.log('average ratings of a driver...', averageRating)
 
   driver.rating = averageRating; 
   await driver.save();
 
-  return newRating;
+  return {
+    newRating,
+    averageRating,
+  };
 };
 
 
@@ -37,19 +46,23 @@ const rateRide = async (passengerId, rideId, ratingData) => {
   const { rideRating, comment } = ratingData;
 
   const newRating = new Rating({
-      passenger: passengerId,
-      ride: rideId,
-      rideRating,
-      comment,
+    passenger: passengerId,
+    ride: rideId,
+    rideRating,
+    comment,
   });
 
   await newRating.save();
 
   const ride = await Ride.findByIdAndUpdate(
-      rideId,
-      { $push: { ratings: newRating._id } }, 
-      { new: true }
+    rideId,
+    { $push: { ratings: newRating._id } }, 
+    { new: true }
   ).populate('ratings');
+
+  if (!ride) {
+    throw new Error('Ride not found');
+  }
 
   const totalRating = ride.ratings.reduce((sum, r) => sum + r.rideRating, 0);
   const averageRating = totalRating / ride.ratings.length;
@@ -57,11 +70,63 @@ const rateRide = async (passengerId, rideId, ratingData) => {
   ride.rideRating = averageRating; 
   await ride.save(); 
 
-  return newRating;
+  return {
+    newRating,
+    averageRating
+  };
 };
+
+
+const getRideRatings = async (rideId) => {
+  const ride = await Ride.findById(rideId)
+    .populate({
+      path: 'ratings',
+      populate: {
+        path: 'passenger', 
+        select: 'name email' 
+      }
+    });
+
+  if (!ride) throw new Error('Ride not found');
+
+  if (!ride.ratings || ride.ratings.length === 0) {
+    return null;
+  }
+
+  return ride.ratings;
+};
+
+
+
+const getDriverRatings = async (driverId) => {
+  const driver = await Driver.findById(driverId).populate({
+    path: 'ratings',
+    select: 'riderRating comment', 
+  });
+  
+  if (!driver) {
+    throw new Error('Driver not found');
+  }
+
+  const validRatings = driver.ratings.filter(r => r.riderRating !== undefined && r.riderRating !== null);
+  
+  const totalRating = validRatings.reduce((sum, r) => sum + r.riderRating, 0);
+  const averageRating = validRatings.length > 0 ? totalRating / validRatings.length : 0;
+
+  return {
+    averageRating,
+    ratings: validRatings, 
+  };
+};
+
+
+
+
 
 
 module.exports = {
   rateDriver,
   rateRide,
+  getRideRatings,
+  getDriverRatings,
 };
