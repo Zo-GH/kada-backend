@@ -6,6 +6,7 @@ const baseUserSchema = new Schema({
   email: { type: String, required: true, unique: false },
   password: { type: String, required: true },
   phone: { type: String, required: true },
+  fcmToken: { type: String, required: true },
   role: { type: String, required: true, enum: ['passenger', 'rider', 'admin'], default: 'passenger' },
   isVerified: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },

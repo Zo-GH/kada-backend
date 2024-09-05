@@ -5,7 +5,10 @@ const createPassenger = async (data) => {
     const hashedPassword = await bcryptjs.hash(data.password, 10); 
     data.password = hashedPassword;
 
-    const passenger = new Passenger(data);
+    const passenger = new Passenger({
+        ...data, 
+        fcmToken: data.fcmToken 
+    });
     await passenger.save();
     return passenger;
 };

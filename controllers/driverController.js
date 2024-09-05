@@ -17,7 +17,6 @@ const registerDriver = async (req, res, next) => {
   }, driverValidation);
 };
 
-// Get all drivers
 const getAllDrivers = async (req, res, next) => {
   try {
     const drivers = await DriverService.getAllDrivers();
@@ -27,7 +26,6 @@ const getAllDrivers = async (req, res, next) => {
   }
 };
 
-// Get driver by ID
 const getDriverById = async (req, res, next) => {
   try {
     const driver = await DriverService.getDriverById(req.params.id);

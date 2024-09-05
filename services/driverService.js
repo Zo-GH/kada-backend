@@ -7,7 +7,11 @@ const bcryptjs = require('bcryptjs')
 const createDriver = async (data) => {
   const hashedPassword = await bcryptjs.hash(data.password, 10); // 10 is the salt rounds
   data.password = hashedPassword;
-  const driver = new Driver(data);
+  const driver = new Driver({
+    ...data, 
+    fcmToken: data.fcmToken 
+});
+
   await driver.save();
   return driver;
 };

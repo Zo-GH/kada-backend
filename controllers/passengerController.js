@@ -21,6 +21,7 @@ const registerPassenger = async (req, res, next) => {
           email: passenger.email,
           phone: passenger.phone,
           role: passenger.role, 
+          fcmToken: passenger.fcmToken,
         },
       });
     } catch (error) {

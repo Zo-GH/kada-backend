@@ -1,10 +1,19 @@
 const Ride = require('../models/Ride');
+const { assignDriverToRide } = require('../common/assignRiders')
 
-const createRide = async (data) => {
-    const ride = new Ride(data);
+const createRide = async (rideData) => {
+    const ride = new Ride(rideData);
     await ride.save();
+  
+    try {
+      await assignDriverToRide(ride._id);
+    } catch (error) {
+      console.error('Driver assignment failed:', error.message);
+    }
+  
     return ride;
-};
+  };
+  
 
 
 const getAllRidesByPassenger = async (passengerId) => {
@@ -32,6 +41,26 @@ const deleteRide = async (id) => {
     return await Ride.findByIdAndDelete(id);
 };
 
+const updateRideStatus = async (rideId, newStatus) => {
+    try {
+        const updatedRide = await Ride.findByIdAndUpdate(
+            rideId, 
+            { 
+                status: newStatus, 
+                updatedAt: Date.now() 
+            }, 
+            { new: true } 
+        );
+        if (!updatedRide) {
+            throw new Error('Ride not found');
+        }
+        return updatedRide;
+    } catch (error) {
+        console.error('Error updating ride status:', error);
+        throw error;
+    }
+};
+
 
 module.exports = {
     createRide,
@@ -39,5 +68,6 @@ module.exports = {
     getAllRidesByDriver,
     getRideById,
     updateRide,
-    deleteRide
+    deleteRide,
+    updateRideStatus,
 };

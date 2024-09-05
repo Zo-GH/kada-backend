@@ -1,5 +1,4 @@
 const RideService = require('../services/RideServices');
-const requestMiddleware = require('../middlewares/requestMiddleware');
 const rideValidation = require('../validation/rideValidation')
 const errorHandler = require('../middlewares/errorHandler');
 const Passenger = require('../models/Passenger')
@@ -12,7 +11,6 @@ const requestRide = async (req, res, next) => {
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
         }
-        
         const rideData = {
             passenger: req.user._id,  
             pickupLocation: req.body.pickupLocation,
@@ -40,9 +38,10 @@ const requestRide = async (req, res, next) => {
         });
     } catch (error) {
         console.error('Error during ride request:', error);
-        errorHandler(error, req, res, next);
+        errorHandler(error, req, res, next); 
     }
 };
+
 
   
 
