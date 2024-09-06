@@ -1,69 +1,39 @@
-const RideService = require('../services/RideServices'); 
-const Driver = require('../models/Driver');
-const Passenger = require('../models/Passenger'); 
-const { sendNotification } = require('./notifications');
+const { findAvailableDrivers } = require('../utils/driverUtils');
+const { notifyPassenger, notifyDriver } = require('../utils/notificationUtils');
+const { updateRideHistory } = require('../utils/rideHistoryUtils');
+const { updateRideStatus } = require('../utils/rideStatusUtils');
+const Ride = require('../models/Ride');
+const Passenger = require('../models/Passenger');
+
+const getRideById = async (id) => {
+    return await Ride.findById(id)
+      .populate('passenger', 'name email')
+      .populate('driver', 'name email');
+};
 
 const assignDriverToRide = async (rideId) => {
-    const ride = await RideService.getRideById(rideId);
+    const ride = await getRideById(rideId);
     if (!ride) throw new Error('Ride not found');
 
-    const availableDrivers = await Driver.find({
-        'availability.isOnline': true,
-        'availability.currentActivity': 'available',
-        'location': { 
-            $near: { 
-                $geometry: { 
-                    type: 'Point', 
-                    coordinates: ride.pickupLocation.coordinates 
-                }, 
-                $maxDistance: 10000 
-            }
-        }
-    });
+    const availableDrivers = await findAvailableDrivers(ride.pickupLocation.coordinates);
 
     if (availableDrivers.length === 0) {
-        await RideService.updateRideStatus(rideId, 'pendingAssignment');
+        await updateRideStatus(rideId, 'pendingAssignment');
 
         const passenger = await Passenger.findById(ride.passenger);
-        if (passenger && passenger.fcmToken) {
-            await sendNotification(passenger.fcmToken, {
-                title: 'Driver Search Update',
-                body: 'No drivers are currently available. We are still searching for one.'
-            });
-        }
+        await notifyPassenger(passenger, 'Driver Search Update', 'No drivers are currently available. We are still searching for one.');
         return null;
     }
 
-    const assignedDriver = availableDrivers[0]; 
-    ride.driver = assignedDriver._id;
-    assignedDriver.rideHistory.push({
-        rideId: ride._id,
-        status: 'inProgress',
+    availableDrivers.forEach(async (driver) => {
+        await updateRideHistory(driver, ride._id, 'awaitingAcceptance');
+
+        await notifyDriver(driver, 'New Ride Request', `You have a new ride request. Accept if you're available.`);
     });
 
-    try {
-        await ride.save();
-        await assignedDriver.save();
-
-        const passenger = await Passenger.findById(ride.passenger);
-        if (passenger && passenger.fcmToken) {
-            await sendNotification(passenger.fcmToken, {
-                title: 'Ride Assigned',
-                body: `Driver ${assignedDriver.name} is on the way!`
-            });
-        }
-
-        const driver = await Driver.findById(assignedDriver._id);
-        if (driver && driver.fcmToken) {
-            await sendNotification(driver.fcmToken, {
-                title: 'New Ride Assigned',
-                body: `You have been assigned to ride ${rideId}.`
-            });
-        }
-
-    } catch (error) {
-        console.error('Error saving ride or driver:', error);
-    }
+    const passenger = await Passenger.findById(ride.passenger);
+    await updateRideHistory(passenger, ride._id, 'awaitingAcceptance');
+    await notifyPassenger(passenger, 'Drivers Notified', 'Drivers have been notified of your request.');
 
     return ride;
 };

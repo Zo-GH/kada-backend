@@ -179,33 +179,5 @@ driverRouter.patch('/drivers/:id', DriverController.updateDriver);
  */
 driverRouter.delete('/drivers/:id', DriverController.deleteDriver);
 
-/**
- * @swagger
- * /rider/rides/{rideId}/driver/{driverId}:
- *   put:
- *     summary: Assign driver to a ride
- *     tags: [Drivers]
- *     parameters:
- *       - in: path
- *         name: rideId
- *         required: true
- *         schema:
- *           type: string
- *         description: Ride ID
- *       - in: path
- *         name: driverId
- *         required: true
- *         schema:
- *           type: string
- *         description: Driver ID
- *     responses:
- *       200:
- *         description: Driver assigned to ride successfully
- *       404:
- *         description: Ride or driver not found
- *       500:
- *         description: Internal server error
- */
-driverRouter.put('/rides/:rideId/driver/:driverId', DriverController.assignDriverToRide);
 
 module.exports = driverRouter;

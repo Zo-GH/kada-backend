@@ -18,6 +18,9 @@ const rideSchema = new Schema({
     enum: ['requested', 'accepted', 'inProgress', 'completed', 'canceled', 'pendingAssignment'],
     default: 'requested',
   },
+  startTime: { type: Date }, 
+  endTime: { type: Date }, 
+  estimatedTimeOfArrival: { type: Number },
   fare: { type: Number, required: true },
   ratings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rating' }], 
   reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }] ,
@@ -26,5 +29,8 @@ const rideSchema = new Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
+
+rideSchema.index({ 'pickupLocation.coordinates': '2dsphere' });
+rideSchema.index({ 'dropoffLocation.coordinates': '2dsphere' });
 
 module.exports = mongoose.model('Ride', rideSchema);

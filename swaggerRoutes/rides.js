@@ -170,6 +170,102 @@
  *         description: Access denied
  */
 
+/**
+ * @swagger
+ * /accept-ride:
+ *   post:
+ *     summary: Accept a ride as a driver
+ *     tags: [Rides]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - driverId
+ *               - rideId
+ *             properties:
+ *               driverId:
+ *                 type: string
+ *                 description: The ID of the driver accepting the ride
+ *               rideId:
+ *                 type: string
+ *                 description: The ID of the ride to accept
+ *     responses:
+ *       200:
+ *         description: Ride accepted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Ride accepted successfully
+ *                 data:
+ *                   $ref: '#/components/schemas/Ride'
+ *       400:
+ *         description: Missing or invalid parameters
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Ride or driver not found
+ *       500:
+ *         description: Internal server error
+ */
+
+
+/**
+ * @swagger
+ * /cancel-ride:
+ *   post:
+ *     summary: Cancel a ride
+ *     tags: [Rides]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - rideId
+ *               - reason
+ *             properties:
+ *               rideId:
+ *                 type: string
+ *                 description: The ID of the ride to cancel
+ *               reason:
+ *                 type: string
+ *                 description: The reason for canceling the ride
+ *     responses:
+ *       200:
+ *         description: Ride canceled successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Ride canceled successfully
+ *                 data:
+ *                   $ref: '#/components/schemas/Ride'
+ *       400:
+ *         description: Missing or invalid parameters
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Ride not found
+ *       500:
+ *         description: Internal server error
+ */
+
+
 const express = require('express');
 const rideRouter = express.Router();
 const rideController = require('../controllers/rideController');
@@ -180,6 +276,8 @@ rideRouter.get('/passenger', jwtMiddleware(['passenger']), rideController.getRid
 rideRouter.get('/rider', jwtMiddleware(['rider']), rideController.getRidesForDriver );
 rideRouter.get('/:id', jwtMiddleware(['passenger', 'rider']), rideController.getRideById);
 rideRouter.patch('/:id', jwtMiddleware(['passenger', 'rider']), rideController.updateRideStatus);
-rideRouter.delete('/:id', jwtMiddleware(['passenger', 'admin']), rideController.cancelRide);
+rideRouter.delete('/:id', jwtMiddleware(['passenger', 'admin']), rideController.deleteRide);
+rideRouter.post('/accept-ride', jwtMiddleware(['rider']),  rideController.acceptRide)
+rideRouter.post('/cancel-ride', jwtMiddleware(['passenger', 'rider']), rideController.cancelRide)
 
 module.exports = rideRouter;

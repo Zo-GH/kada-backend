@@ -11,12 +11,14 @@ const driverSchema = new mongoose.Schema({
     licensePlate: { type: String, required: true },
     insuranceNumber: { type: String },
     licenseStatus: { type: Boolean, default: false },
-  },
+  },  
 
   rideHistory: [
     {
       rideId: { type: mongoose.Schema.Types.ObjectId, ref: 'Ride' },
-      status: { type: String, enum: ['inProgress', 'completed', 'canceled'] }, 
+      status: { type: String, enum: ['inProgress', 'completed', 'canceled', 'awaitingAcceptance'] }, 
+      startTime: { type: Date }, // Track when each ride started
+      endTime: { type: Date },
     },
   ],
 
@@ -35,6 +37,8 @@ const driverSchema = new mongoose.Schema({
     },
   ],
 });
+
+driverSchema.index({ 'location.coordinates': '2dsphere', role: 'rider' });
 
 const Driver = BaseUser.discriminator('rider', driverSchema);
 

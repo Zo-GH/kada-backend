@@ -14,6 +14,10 @@ const locationSchema = new mongoose.Schema({
   address: {
     type: String,  
   },
+  _id: false,
+  
+}, {
+  id: false 
 });
 
 locationSchema.index({ coordinates: '2dsphere' });  

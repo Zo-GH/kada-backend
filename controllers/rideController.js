@@ -1,6 +1,7 @@
 const RideService = require('../services/RideServices');
 const rideValidation = require('../validation/rideValidation')
 const errorHandler = require('../middlewares/errorHandler');
+const { updateRideHistory } = require('../utils/rideHistoryUtils');
 const Passenger = require('../models/Passenger')
 
 const requestRide = async (req, res, next) => {
@@ -25,7 +26,6 @@ const requestRide = async (req, res, next) => {
         const passenger = await Passenger.findById(req.user._id);
         if (passenger) {
             console.log('Passenger found:', passenger);
-            passenger.rideHistory.push(ride._id);
             console.log('Updated rideHistory:', passenger.rideHistory);
             await passenger.save();
         } else {
@@ -115,8 +115,31 @@ const updateRideStatus = async (req, res, next) => {
     }
 };
 
+const acceptRide = async (req, res, next) => {
+    try {
+        const { driverId, rideId } = req.body;
+        
+        // Validate input
+        if (!driverId || !rideId) {
+            return res.status(400).json({ message: 'Driver ID and Ride ID are required' });
+        }
 
-const cancelRide = async (req, res, next) => {
+        // Call the service function to accept the ride
+        const ride = await RideService.acceptRide(driverId, rideId);
+
+        res.status(200).json({
+            message: 'Ride accepted successfully',
+            data: ride,
+        });
+    } catch (error) {
+        console.error('Error during ride acceptance:', error);
+        errorHandler(error, req, res, next);
+    }
+};
+
+
+
+const deleteRide = async (req, res, next) => {
     try {
         const ride = await RideService.getRideById(req.params.id);
         if (!ride) {
@@ -134,6 +157,28 @@ const cancelRide = async (req, res, next) => {
     }
 };
 
+const cancelRide = async (req, res, next) => {
+    try {
+        const { rideId, reason } = req.body;
+        
+        // Validate input
+        if (!rideId || !reason) {
+            return res.status(400).json({ message: 'Ride ID and reason for cancellation are required' });
+        }
+
+        // Call the service function to cancel the ride
+        const ride = await RideService.cancelRide(rideId, reason);
+
+        res.status(200).json({
+            message: 'Ride canceled successfully',
+            data: ride,
+        });
+    } catch (error) {
+        console.error('Error during ride cancellation:', error);
+        errorHandler(error, req, res, next);
+    }
+};
+
 
 module.exports = {
     requestRide,
@@ -141,5 +186,7 @@ module.exports = {
     getRidesForDriver,
     getRideById,
     updateRideStatus,
-    cancelRide
+    cancelRide,
+    acceptRide,
+    deleteRide,
 };

@@ -12,7 +12,7 @@ module.exports = otpRouter;
 /**
  * @swagger
  * tags:
- *   name: Password reset
+ *   name: Password Reset
  *   description: Ride management API
  */
 
