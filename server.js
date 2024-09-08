@@ -19,8 +19,11 @@ const {
 const connect_database = require("./utils/db");
 
 const app = express();
-const server = require("http").createServer(app);
-const io = require("socket.io")(server);
+const server = require("http").createServer(app)
+const { init } = require('./common/websocket/io');;
+const io = init(server);
+
+const socketHandlers = require('./common/websocket/socket'); 
 
 app.use(cors());
 app.use(cookieParser());
@@ -46,19 +49,7 @@ const PORT = config.PORT || 3000;
 
 connect_database();
 
-io.on("connection", (socket) => {
-  console.log("New client connected");
-
-  socket.on("event", (data) => {
-    console.log("Received event:", data);
-  });
-
-  socket.emit("event", "Hello from server!");
-
-  socket.on("disconnect", () => {
-    console.log("Client disconnected");
-  });
-});
+socketHandlers(io); 
 
 server.listen(PORT, () => {
   console.log("Server listening on port", PORT);
@@ -70,4 +61,7 @@ app.get("/", (req, res, next) => {
   );
 });
 
-module.exports = app;
+module.exports = {
+  app,
+  io,
+}

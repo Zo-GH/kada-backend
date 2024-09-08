@@ -1,4 +1,4 @@
-const { sendNotification } = require('../common/notifications');
+const { sendNotification } = require('../common/assignDrivers/notifications');
 
 const notifyPassenger = async (passenger, title, body) => {
     if (passenger && passenger.fcmToken) {
