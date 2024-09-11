@@ -7,8 +7,11 @@ const rideValidation = Joi.object({
   driver: Joi.string().hex().length(24), // Reference to Driver ID
   pickupLocation: locationValidation.required(),
   dropoffLocation: locationValidation.required(),
+  distanceInKm: Joi.number().min(0).required(),
+  estimatedTimeInMinutes: Joi.number().min(0).required(),
+  trafficConditions: Joi.string().valid('low', 'moderate', 'high'),
   status: Joi.string().valid('requested', 'accepted', 'inProgress', 'completed', 'canceled').default('requested'),
-  fare: Joi.number().required(),
+  fare: Joi.number().min(0),
   paymentStatus: Joi.string().valid('pending', 'paid').default('pending'),
 });
 

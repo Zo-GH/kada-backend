@@ -2,7 +2,11 @@ let io;
 
 module.exports = {
   init: (server) => {
-    io = require('socket.io')(server);
+    io = require('socket.io')(server, {
+      pingInterval: 600000, 
+      pingTimeout: 60000,   
+      transports: ['websocket'],
+    });
     return io;
   },
   getIO: () => {

@@ -28,8 +28,6 @@ const getCurrentUser = async (req, res, next) => {
     const id = (decodedToken.id);
     const role = decodedToken.role;
  
-    console.log('User ID:', id);
-    console.log('User Role:', role);
 
     let user;
     const objectId = new mongoose.Types.ObjectId(id);
@@ -42,8 +40,6 @@ const getCurrentUser = async (req, res, next) => {
       user = await Admin.findById(objectId);
     }
 
-    console.log('User:', user);
-
     if (!user) {
       return next(new Error('User not found'));
     }
@@ -51,13 +47,12 @@ const getCurrentUser = async (req, res, next) => {
     req.user = user; 
     next(); 
   } catch (error) {
-    next(error); // Ensure errors are passed to the next middleware
+    next(error); 
   }
 };
 
 
 const jwtMiddleware = (roles = []) => {
-  // Convert single role to array for consistency
   if (typeof roles === 'string') {
     roles = [roles];
   }
@@ -65,26 +60,20 @@ const jwtMiddleware = (roles = []) => {
   return [
     async (req, res, next) => {
       try {
-        // Use getCurrentUser to verify and get user
         await getCurrentUser(req, res, next);
 
         if (!req.user) {
           return next(new Error('User not found'));
         }
 
-        // Check if the role matches (if roles are provided)
         if (roles.length && !roles.includes(req.user.role)) {
-          console.log('Roles:', roles);
-          console.log('User Role:', req.user.role);
 
           return next(new Error('Unauthorized'));
         }
 
-        console.log('Role matches!');
-         // If authorized, proceed to the next middleware or route handler
       } catch (error) {
         console.log('Error in jwtMiddleware:', error);
-        next(error); // Ensure errors are passed to the next middleware
+        next(error); 
       }
     },
   ];

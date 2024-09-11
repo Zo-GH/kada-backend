@@ -16,6 +16,15 @@ class ENVs {
   TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID
   TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN
   TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER
+  BASE_FARE = process.env.BASE_FARE;
+  FARE_PER_KM = process.env.FARE_PER_KM;
+  FARE_PER_MIN = process.env.FARE_PER_MIN;
+  MINIMUM_FARE = process.env.MINIMUM_FARE;
+  TRAFFIC_MULTIPLIERS = {
+    light: parseFloat(process.env.TRAFFIC_MULTIPLIERS_LIGHT),
+    moderate: parseFloat(process.env.TRAFFIC_MULTIPLIERS_MODERATE),
+    heavy: parseFloat(process.env.TRAFFIC_MULTIPLIERS_HEAVY),
+  };
 }
 
 const config = new ENVs();

@@ -2,7 +2,6 @@ const { getIO } = require('./io');
 
 module.exports = () => {
   const io = getIO(); // Get the initialized io instance
-  console.log('io...', io)
 
   io.on("connection", (socket) => {
     console.log("New client connected:", socket.id);
@@ -27,8 +26,8 @@ module.exports = () => {
       io.emit(`rideMissed-${data.rideId}`, data);
     });
 
-    socket.on("disconnect", () => {
-      console.log("Client disconnected:", socket.id);
+    socket.on("disconnect", (reason) => {
+      console.log("Client disconnected:", socket.id, 'Reason:', reason);
     });
   });
 };

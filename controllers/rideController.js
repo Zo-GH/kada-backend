@@ -1,32 +1,29 @@
 const RideService = require('../services/RideServices');
 const rideValidation = require('../validation/rideValidation')
 const errorHandler = require('../middlewares/errorHandler');
-const { updateRideHistory } = require('../utils/rideHistoryUtils');
 const Passenger = require('../models/Passenger')
+const { calculateFare } = require('../common/pricing/fareCalculator')
 
 const requestRide = async (req, res, next) => {
     try {
-        console.log('Passenger ID from token:', req.user._id);
         
         const { error } = rideValidation.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
         }
+
+        const { pickupLocation, dropoffLocation, distanceInKm, estimatedTimeInMinutes, trafficConditions } = req.body;
+        const calculatedFare = calculateFare(distanceInKm, estimatedTimeInMinutes, trafficConditions)
+
         const rideData = {
             passenger: req.user._id,  
-            pickupLocation: req.body.pickupLocation,
-            dropoffLocation: req.body.dropoffLocation,
-            fare: req.body.fare,
+            pickupLocation,
+            dropoffLocation,
+            fare: calculatedFare,
         };
-        console.log('Ride data being saved:', rideData);
-
         const ride = await RideService.createRide(rideData);
-        console.log('Created ride:', ride);
-
         const passenger = await Passenger.findById(req.user._id);
         if (passenger) {
-            console.log('Passenger found:', passenger);
-            console.log('Updated rideHistory:', passenger.rideHistory);
             await passenger.save();
         } else {
             return res.status(404).json({ message: 'Passenger not found' });

@@ -19,7 +19,6 @@ const assignDriverToRide = async (rideId) => {
 
     const availableDrivers = await findAvailableDrivers(ride.pickupLocation.coordinates);
     const io = getIO();
-    console.log('io...', io)
 
     if (availableDrivers.length === 0) {
         await updateRideStatus(rideId, 'pendingAssignment');
