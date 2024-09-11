@@ -25,7 +25,23 @@ const io = init(server);
 
 const socketHandlers = require('./common/websocket/socket'); 
 
-app.use(cors());
+const corsOptions = {
+  origin: '*', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'Accept',
+    'Accept-Language',
+    'Content-Length',
+    'Host',
+    'Referer',
+    'User-Agent'
+  ],
+  credentials: true  
+};
+
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: "50mb" }));
