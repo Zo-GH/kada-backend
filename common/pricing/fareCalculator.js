@@ -3,15 +3,13 @@ const { config } = require('../../config/config')
 
 
 const calculateFare = (distanceInKm, estimatedTimeInMinutes, trafficConditions) => {
-    const baseFare = config.BASE_FARE;
-    const distanceFare = config.FARE_PER_KM * distanceInKm;
-    const timeFare = config.FARE_PER_MIN * estimatedTimeInMinutes;
-  
-    const trafficMultiplier = config.TRAFFIC_MULTIPLIERS[trafficConditions] || 1.0;
-    console.log('baseFare...', baseFare)
-    console.log('distanceFare...', distanceFare)
-    console.log('timeFare...', timeFare)
-    console.log('multiplier...', trafficMultiplier)
+
+   
+    const baseFare = parseFloat(config.BASE_FARE);
+    const distanceFare = parseFloat(config.FARE_PER_KM) * distanceInKm;
+    const timeFare = parseFloat(config.FARE_PER_MIN) * estimatedTimeInMinutes;
+    const trafficMultiplier = parseFloat(config.TRAFFIC_MULTIPLIERS[trafficConditions]) || 1.0;
+
   
     let totalFare = (baseFare + distanceFare + timeFare) * trafficMultiplier;
   
