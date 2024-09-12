@@ -1,47 +1,44 @@
 const DriverService = require('../services/driverService');
 const requestMiddleware = require('../middlewares/requestMiddleware');
 const { driverValidation, updateRiderValidation } = require('../validation/driverValidation');
+const  locationValidation = require('../validation/locationValidation')
 const errorHandler = require('../middlewares/errorHandler');
 
 const registerDriver = async (req, res, next) => {
-  requestMiddleware(req, res, next, async () => {
   try {
-    const { name, email, password, phone, fcmToken, ghanaCardNumber, location, vehicleDetails } = req.body;
-    console.log('location...', req.body.location)
+      const vehicleDetails = JSON.parse(req.body.vehicleDetails);
+      const { name, email, password, phone, fcmToken, ghanaCardNumber } = req.body;
+      const { imageUrls } = req.body;
+      const driverData = {
+        name,
+        email,
+        password,
+        phone,
+        fcmToken,
+        vehicleDetails,
+        ghanaCardNumber,
+        ghanaCardFront: imageUrls.ghanaCardFront,
+        ghanaCardBack: imageUrls.ghanaCardBack,
+        profilePicture: imageUrls.profilePicture,
+        bikePicture: imageUrls.bikePicture,
+        helmetPicture: imageUrls.helmetPicture,
+      };
 
-    if (typeof req.body.location === 'string') {
-      req.body.location = JSON.parse(req.body.location);
-    }
-    const { imageUrls } = req.body; 
-
-    
-    const driverData = {
-      name,
-      email,
-      password,
-      phone,
-      fcmToken,
-      location,
-      vehicleDetails,
-      ghanaCardNumber,
-      ghanaCardFront: imageUrls.ghanaCardFront,
-      ghanaCardBack: imageUrls.ghanaCardBack,
-      profilePicture: imageUrls.profilePicture,
-      bikePicture: imageUrls.bikePicture,
-      helmetPicture: imageUrls.helmetPicture,
-    };
-
-    const driver = await DriverService.createDriver(driverData);
-    
-    res.status(201).json({
-      message: "Driver registered successfully",
-      data: driver,
-    });
+      console.log('driverdata', driverData)
+      const { error } = driverValidation.validate(driverData);
+      if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+      }
+      const driver = await DriverService.createDriver(driverData);
+      res.status(201).json({
+        message: "Driver registered successfully",
+        data: driver,
+      });
   } catch (error) {
     errorHandler(error, req, res, next);
   }
-  }, driverValidation,);
-}
+};
+
 
 
 const getAllDrivers = async (req, res, next) => {
@@ -129,6 +126,49 @@ const toggleAvailability = async (req, res, next) => {
   }
 };
 
+const updateDriverLocation = async (req, res, next) => {
+  try {
+    console.log(req.body)
+    const { error } = locationValidation.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
+    const driverId = req.user.id;  // Assuming driver is authenticated and you have driver ID
+    const { coordinates, address } = req.body;
+
+    // Prepare location data for GeoJSON format
+    const locationData = {
+      type: 'Point',
+      coordinates,
+      address,
+    };
+
+    const updatedLocation = await DriverService.updateDriverLocation(driverId, locationData);
+    
+    res.status(200).json({
+      message: 'Location updated successfully',
+      data: updatedLocation,
+    });
+  } catch (error) {
+    errorHandler(error, req, res, next);
+  }
+};
+
+const toggleDriverApproval = async (req, res, next) => {
+  try {
+    const { driverId } = req.params;  
+
+    const updatedDriver = await DriverService.toggleDriverApproval(driverId);
+    
+    res.status(200).json({
+      message: `Driver ${updatedDriver.isApproved ? 'approved' : 'disapproved'} successfully`,
+      data: updatedDriver,
+    });
+  } catch (error) {
+    errorHandler(error, req, res, next);
+  }
+};
 
 module.exports = {
   registerDriver,
@@ -138,4 +178,6 @@ module.exports = {
   deleteDriver,
   assignDriverToRide,
   toggleAvailability,
+  updateDriverLocation,
+  toggleDriverApproval,
 };

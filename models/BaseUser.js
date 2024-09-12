@@ -8,7 +8,6 @@ const baseUserSchema = new Schema({
   phone: { type: String, required: true },
   fcmToken: { type: String, required: true },
   role: { type: String, required: true, enum: ['passenger', 'rider', 'admin'], default: 'passenger' },
-  isVerified: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 }, { discriminatorKey: 'role' }); 

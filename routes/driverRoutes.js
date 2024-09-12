@@ -7,6 +7,8 @@ const { handleImageUploads, uploadImagesToCloudinary } = require('../utils/image
 
 
 driverRouter.patch('/availability', jwtMiddleware(['rider']),  DriverController.toggleAvailability);
+driverRouter.patch('/location', jwtMiddleware(['rider']), DriverController.updateDriverLocation)
+driverRouter.patch('/approval/:driverId', jwtMiddleware(['admin']), DriverController.toggleDriverApproval)
 driverRouter.post('/', handleImageUploads, uploadImagesToCloudinary, DriverController.registerDriver);
 driverRouter.get('/', DriverController.getAllDrivers);
 driverRouter.get('/:id', DriverController.getDriverById);

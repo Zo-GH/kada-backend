@@ -7,7 +7,6 @@ const baseUserValidation = {
   password: Joi.string().min(6).required(),
   phone: Joi.string().pattern(/^[+]?[0-9]{10,15}$/).required(),
   role: Joi.string().valid('passenger', 'rider', 'admin'),
-  isVerified: Joi.boolean().default(false),
   fcmToken: fcmTokenSchema,
 
 };

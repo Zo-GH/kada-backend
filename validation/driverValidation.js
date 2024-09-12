@@ -5,7 +5,6 @@ const baseUserValidation = require('./baseValidation');
 
 const driverValidation = Joi.object({
   ...baseUserValidation,
-  location: locationValidation,
   ghanaCardFront: Joi.string().uri().required(), 
   ghanaCardBack: Joi.string().uri(), 
   profilePicture: Joi.string().uri(), 

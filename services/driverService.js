@@ -43,6 +43,8 @@ const assignDriverToRide = async (rideId, driverId) => {
     throw new Error('Driver is not available for a ride');
   }
 
+  
+
   ride.driver = driverId;
   driver.rideHistory.push({
     rideId: ride._id,
@@ -53,6 +55,24 @@ const assignDriverToRide = async (rideId, driverId) => {
   await driver.save();
 
   return ride;
+};
+
+const updateDriverLocation = async (driverId, locationData) => {
+  try {
+    const updatedDriver = await Driver.findByIdAndUpdate(
+      driverId,
+      { location: locationData },
+      { new: true }
+    );
+
+    if (!updatedDriver) {
+      throw new Error('Driver not found');
+    }
+
+    return updatedDriver.location;
+  } catch (error) {
+    throw error;
+  }
 };
 
 
@@ -70,6 +90,25 @@ const toggleDriverAvailability = async (driverId, isOnline) => {
   );
 };
 
+const toggleDriverApproval = async (driverId) => {
+  try {
+    const driver = await Driver.findById(driverId);
+    if (!driver) {
+      throw new Error('Driver not found');
+    }
+
+    const updatedDriver = await Driver.findByIdAndUpdate(
+      driverId,
+      { isApproved: !driver.isApproved },
+      { new: true }
+    );
+
+    return updatedDriver;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 module.exports = {
   createDriver,
@@ -79,4 +118,6 @@ module.exports = {
   deleteDriver,
   assignDriverToRide,
   toggleDriverAvailability,
+  updateDriverLocation,
+  toggleDriverApproval,
 };

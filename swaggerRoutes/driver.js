@@ -39,6 +39,69 @@ const DriverController = require('../controllers/driverController');
  */
 driverRouter.patch('/availability', jwtMiddleware(['rider']), DriverController.toggleAvailability);
 
+/**
+ * @swagger
+ * /rider/location:
+ *   patch:
+ *     summary: Update driver's current location
+ *     tags: [Drivers]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               coordinates:
+ *                 type: array
+ *                 items:
+ *                   type: number
+ *                 description: Array containing longitude and latitude, e.g., [longitude, latitude].
+ *                 example: [-0.1276, 51.5074]
+ *               address:
+ *                 type: string
+ *                 description: The address associated with the location.
+ *     responses:
+ *       200:
+ *         description: Driver location updated successfully
+ *       400:
+ *         description: Invalid request body
+ *       404:
+ *         description: Driver not found
+ *       500:
+ *         description: Internal server error
+ */
+driverRouter.patch('/location', jwtMiddleware(['rider']), DriverController.updateDriverLocation)
+
+/**
+ * @swagger
+ * /rider/approval/{driverId}:
+ *   patch:
+ *     summary: Toggle driver approval status by admin
+ *     tags: [Drivers]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: driverId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the driver to toggle approval status
+ *     responses:
+ *       200:
+ *         description: Driver approval status updated successfully
+ *       400:
+ *         description: Invalid driver ID
+ *       404:
+ *         description: Driver not found
+ *       500:
+ *         description: Internal server error
+ */
+driverRouter.patch('/approval/:driverId', jwtMiddleware(['admin']), DriverController.toggleDriverApproval)
+
 
 
 /**
@@ -90,17 +153,6 @@ driverRouter.patch('/availability', jwtMiddleware(['rider']), DriverController.t
  *                    type: string
  *                  insuranceNumber:
  *                    type: string
- *              location:
- *                 type: object
- *                 properties:
- *                   type:
- *                     type: string
- *                     example: "Point"
- *                   coordinates:
- *                     type: array
- *                     items:
- *                       type: number
- *                     example: [34.0522, -118.2437]
  *                
  *    responses:
  *      201:
@@ -213,6 +265,8 @@ driverRouter.patch('/drivers/:id', DriverController.updateDriver);
  *         description: Internal server error
  */
 driverRouter.delete('/drivers/:id', DriverController.deleteDriver);
+
+
 
 
 module.exports = driverRouter;
