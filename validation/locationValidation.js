@@ -7,6 +7,6 @@ const locationValidation = Joi.object({
     Joi.number().min(-90).max(90)    // Latitude
   ).length(2).required(),
   address: Joi.string().required()
-});
+}).optional();;
 
 module.exports = locationValidation;

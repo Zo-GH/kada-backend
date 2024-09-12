@@ -2,10 +2,12 @@ const express = require('express');
 const driverRouter = express.Router();
 const DriverController = require('../controllers/driverController');
 const { jwtMiddleware } = require('../middlewares/jwt');
+const { handleImageUploads, uploadImagesToCloudinary } = require('../utils/imageUtils');
+
 
 
 driverRouter.patch('/availability', jwtMiddleware(['rider']),  DriverController.toggleAvailability);
-driverRouter.post('/', DriverController.registerDriver);
+driverRouter.post('/', handleImageUploads, uploadImagesToCloudinary, DriverController.registerDriver);
 driverRouter.get('/', DriverController.getAllDrivers);
 driverRouter.get('/:id', DriverController.getDriverById);
 driverRouter.patch('/:id', DriverController.updateDriver);

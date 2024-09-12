@@ -20,6 +20,9 @@ class ENVs {
   FARE_PER_KM = process.env.FARE_PER_KM;
   FARE_PER_MIN = process.env.FARE_PER_MIN;
   MINIMUM_FARE = process.env.MINIMUM_FARE;
+  CLOUD_NAME = process.env.CLOUD_NAME;
+  CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET
+  CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY
   TRAFFIC_MULTIPLIERS = {
     light: parseFloat(process.env.TRAFFIC_MULTIPLIERS_LIGHT),
     moderate: parseFloat(process.env.TRAFFIC_MULTIPLIERS_MODERATE),

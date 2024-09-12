@@ -40,43 +40,78 @@ const DriverController = require('../controllers/driverController');
 driverRouter.patch('/availability', jwtMiddleware(['rider']), DriverController.toggleAvailability);
 
 
+
 /**
  * @swagger
- * /rider/drivers:
- *   post:
- *     summary: Register a new driver
- *     tags: [Drivers]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *               vehicleDetails:
+ * /rider/:
+ *  post:
+ *    summary: Register a new driver
+ *    tags: [Drivers]
+ *    requestBody:
+ *      
+ *      content:
+ *        multipart/form-data:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              name:
+ *                type: string
+ *              email:
+ *                type: string
+ *              fcmToken:
+ *                type: string
+ *              password:
+ *                type: string
+ *              ghanaCardNumber:
+ *                type: string
+ *              phone:
+ *                type: string
+ *              ghanaCardFront:
+ *                type: string
+ *                format: binary
+ *              ghanaCardBack:
+ *                type: string
+ *                format: binary
+ *              profilePicture:
+ *                type: string
+ *                format: binary
+ *              bikePicture:
+ *                type: string
+ *                format: binary
+ *              helmetPicture:
+ *                type: string
+ *                format: binary
+ *              vehicleDetails:
+ *                type: object
+ *                properties:
+ *                  carModel:
+ *                    type: string
+ *                  licensePlate:
+ *                    type: string
+ *                  insuranceNumber:
+ *                    type: string
+ *              location:
  *                 type: object
  *                 properties:
- *                   carModel:
+ *                   type:
  *                     type: string
- *                   licensePlate:
- *                     type: string
- *                   insuranceNumber:
- *                     type: string
- *     responses:
- *       201:
- *         description: Driver registered successfully
- *       400:
- *         description: Validation error
- *       500:
- *         description: Internal server error
+ *                     example: "Point"
+ *                   coordinates:
+ *                     type: array
+ *                     items:
+ *                       type: number
+ *                     example: [34.0522, -118.2437]
+ *                
+ *    responses:
+ *      201:
+ *        description: Driver registered successfully
+ *      400:
+ *        description: Validation error
+ *      500:
+ *        description: Internal server error
  */
-driverRouter.post('/drivers', DriverController.registerDriver);
+driverRouter.post('/', DriverController.registerDriver);
+
 
 /**
  * @swagger

@@ -7,8 +7,8 @@ const driverSchema = new mongoose.Schema({
     type: locationSchema,
   },
   vehicleDetails: {
-    carModel: { type: String, required: true },
-    licensePlate: { type: String, required: true },
+    carModel: { type: String, required: false },
+    licensePlate: { type: String, required: false },
     insuranceNumber: { type: String },
     licenseStatus: { type: Boolean, default: false },
   },  
@@ -36,6 +36,13 @@ const driverSchema = new mongoose.Schema({
       details: { type: mongoose.Schema.Types.Mixed }, 
     },
   ],
+  ghanaCardNumber: { type: String },
+  ghanaCardFront: { type: String },
+  ghanaCardBack: { type: String },
+  profilePicture: { type: String },
+  bikePicture: { type: String },
+  helmetPicture: { type: String },
+  isApproved: { type: Boolean, default: false },
 });
 
 driverSchema.index({ 'location.coordinates': '2dsphere', role: 'rider' });

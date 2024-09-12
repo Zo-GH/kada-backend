@@ -5,17 +5,44 @@ const errorHandler = require('../middlewares/errorHandler');
 
 const registerDriver = async (req, res, next) => {
   requestMiddleware(req, res, next, async () => {
-    try {
-      const driver = await DriverService.createDriver(req.body);
-      res.status(201).json({
-        message: "Driver registered successfully",
-        data: driver,
-      });
-    } catch (error) {
-      errorHandler(error, req, res, next);
+  try {
+    const { name, email, password, phone, fcmToken, ghanaCardNumber, location, vehicleDetails } = req.body;
+    console.log('location...', req.body.location)
+
+    if (typeof req.body.location === 'string') {
+      req.body.location = JSON.parse(req.body.location);
     }
-  }, driverValidation);
-};
+    const { imageUrls } = req.body; 
+
+    
+    const driverData = {
+      name,
+      email,
+      password,
+      phone,
+      fcmToken,
+      location,
+      vehicleDetails,
+      ghanaCardNumber,
+      ghanaCardFront: imageUrls.ghanaCardFront,
+      ghanaCardBack: imageUrls.ghanaCardBack,
+      profilePicture: imageUrls.profilePicture,
+      bikePicture: imageUrls.bikePicture,
+      helmetPicture: imageUrls.helmetPicture,
+    };
+
+    const driver = await DriverService.createDriver(driverData);
+    
+    res.status(201).json({
+      message: "Driver registered successfully",
+      data: driver,
+    });
+  } catch (error) {
+    errorHandler(error, req, res, next);
+  }
+  }, driverValidation,);
+}
+
 
 const getAllDrivers = async (req, res, next) => {
   try {
