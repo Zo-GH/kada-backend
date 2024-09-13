@@ -1,16 +1,12 @@
 const bcryptjs= require('bcryptjs');
-const Passenger = require('../models/Passenger');
-const Driver = require('../models/Driver');
-const Admin = require('../models/Admin');
+const BaseUser = require('../models/BaseUser')
 const { generateToken } = require('../middlewares/jwt'); 
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-      let user = await Passenger.findOne({ email }) || 
-                 await Driver.findOne({ email }) || 
-                 await Admin.findOne({ email });
+      let user = await BaseUser.findOne({ email })
 
       if (!user) {
           return res.status(404).json({ message: 'User not found' });
