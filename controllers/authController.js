@@ -1,4 +1,5 @@
 const bcryptjs= require('bcryptjs');
+
 const BaseUser = require('../models/BaseUser')
 const { generateToken } = require('../middlewares/jwt'); 
 
