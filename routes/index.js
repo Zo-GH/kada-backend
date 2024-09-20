@@ -7,5 +7,6 @@ module.exports = {
     driverRoutes: require('./driverRoutes'),
     contractRideRoutes: require('./contractRideRoutes.js'),
     ratingsRoutes: require('./ratingRoutes.js'),
-    resetPasswordRoutes: require('./otpRoute')
+    resetPasswordRoutes: require('./otpRoute'),
+    commonRoutes: require('./commonRoutes.js'),
 }

@@ -49,4 +49,40 @@ const uploadImagesToCloudinary = async (req, res, next) => {
   }
 };
 
-module.exports = { handleImageUploads, uploadImagesToCloudinary };
+const handleProfilePicUpload = upload.single('profilePicture'); 
+
+const uploadProfilePicToCloudinary = async (req, res, next) => {
+  console.log('function called...')
+  try {
+    if (req.file) {
+      const uploadResponse = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: "profile_pictures" }, 
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result);
+          }
+        );
+        uploadStream.end(req.file.buffer);
+      });
+      req.body.profilePicUrl = uploadResponse.secure_url; 
+      console.log('url returned from function', uploadResponse.secure_url)
+      next();
+    } else {
+      return res.status(400).json({ error: 'No profile picture uploaded' });
+    }
+  } catch (error) {
+    console.error('Cloudinary upload error:', error);
+    return res.status(500).json({ error: 'Failed to upload profile picture' });
+  }
+};
+
+module.exports = { handleProfilePicUpload, uploadProfilePicToCloudinary };
+
+
+module.exports = { 
+  handleImageUploads,
+  uploadImagesToCloudinary,
+  handleProfilePicUpload,
+  uploadProfilePicToCloudinary,
+};
