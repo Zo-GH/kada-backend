@@ -1,13 +1,16 @@
 const bcryptjs= require('bcryptjs');
-
-const BaseUser = require('../models/BaseUser')
+const Driver = require('../models/Driver')
+const Passenger = require('../models/Passenger')
 const { generateToken } = require('../middlewares/jwt'); 
+const Admin = require('../models/Admin');
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-      let user = await BaseUser.findOne({ email })
+    let user = await Driver.findOne({ email }) || 
+        await Passenger.findOne({ email }) || 
+        await Admin.findOne({ email });
 
       if (!user) {
           return res.status(404).json({ message: 'User not found' });
@@ -30,6 +33,7 @@ const login = async (req, res, next) => {
               email: user.email,
               phone: user.phone,
               role: user.role, 
+              isApproved: user instanceof Driver ? user.isApproved : null,
           },    
       });
   } catch (error) {

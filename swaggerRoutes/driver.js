@@ -167,7 +167,7 @@ driverRouter.post('/', DriverController.registerDriver);
 
 /**
  * @swagger
- * /rider/drivers:
+ * /rider:
  *   get:
  *     summary: Get all drivers
  *     tags: [Drivers]
@@ -181,7 +181,7 @@ driverRouter.get('/', DriverController.getAllDrivers);
 
 /**
  * @swagger
- * /rider/drivers/{id}:
+ * /rider/{id}:
  *   get:
  *     summary: Get driver by ID
  *     tags: [Drivers]
@@ -200,11 +200,11 @@ driverRouter.get('/', DriverController.getAllDrivers);
  *       500:
  *         description: Internal server error
  */
-driverRouter.get('/drivers/:id', DriverController.getDriverById);
+driverRouter.get('/:id', DriverController.getDriverById);
 
 /**
  * @swagger
- * /rider/drivers/{id}:
+ * /rider/{id}:
  *   patch:
  *     summary: Update driver details by ID
  *     tags: [Drivers]
@@ -241,11 +241,11 @@ driverRouter.get('/drivers/:id', DriverController.getDriverById);
  *       500:
  *         description: Internal server error
  */
-driverRouter.patch('/drivers/:id', DriverController.updateDriver);
+driverRouter.patch('/:id', DriverController.updateDriver);
 
 /**
  * @swagger
- * /rider/drivers/{id}:
+ * /rider/{id}:
  *   delete:
  *     summary: Delete driver by ID
  *     tags: [Drivers]
@@ -264,7 +264,7 @@ driverRouter.patch('/drivers/:id', DriverController.updateDriver);
  *       500:
  *         description: Internal server error
  */
-driverRouter.delete('/drivers/:id', DriverController.deleteDriver);
+driverRouter.delete('/:id', DriverController.deleteDriver);
 
 
 
