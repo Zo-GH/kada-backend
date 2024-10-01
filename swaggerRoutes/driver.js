@@ -177,7 +177,7 @@ driverRouter.post('/', DriverController.registerDriver);
  *       500:
  *         description: Internal server error
  */
-driverRouter.get('/drivers', DriverController.getAllDrivers);
+driverRouter.get('/', DriverController.getAllDrivers);
 
 /**
  * @swagger

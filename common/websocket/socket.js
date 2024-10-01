@@ -13,7 +13,7 @@ module.exports = () => {
 
       let user;
 
-      try {
+      try { 
         if (role === 'rider') {
           user = await BaseUser.findById({ _id: userId, role: 'rider' });
         } else if (role === 'passenger') {
