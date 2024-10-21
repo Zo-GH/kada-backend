@@ -34,7 +34,7 @@ const login = async (req, res, next) => {
               phone: user.phone,
               role: user.role, 
               isApproved: user instanceof Driver ? user.isApproved : null,
-              profilePicture: user instanceof Driver ? user.profilePicture : null,
+              profilePicture: user.profilePicture || null,
           },    
       });
   } catch (error) {

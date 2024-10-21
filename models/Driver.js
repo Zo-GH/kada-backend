@@ -39,7 +39,6 @@ const driverSchema = new mongoose.Schema({
   ghanaCardNumber: { type: String },
   ghanaCardFront: { type: String },
   ghanaCardBack: { type: String },
-  profilePicture: { type: String },
   bikePicture: { type: String },
   helmetPicture: { type: String },
   isApproved: { type: Boolean, default: false },

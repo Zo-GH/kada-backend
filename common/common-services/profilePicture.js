@@ -1,11 +1,11 @@
 const BaseUser = require('../../models/BaseUser')
 
-const updateProfilePicture = async (userId, profilePicUrl) => {
+const updateProfilePicture = async (userId, profilePicture) => {
     try {
       // Find the user by their ID and update the profilePicUrl
       const updatedUser = await BaseUser.findByIdAndUpdate(
         userId,
-        { profilePicUrl },
+        { profilePicture },
         { new: true }
       );
   

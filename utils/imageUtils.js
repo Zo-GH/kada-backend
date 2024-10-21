@@ -65,7 +65,7 @@ const uploadProfilePicToCloudinary = async (req, res, next) => {
         );
         uploadStream.end(req.file.buffer);
       });
-      req.body.profilePicUrl = uploadResponse.secure_url; 
+      req.body.profilePicture = uploadResponse.secure_url; 
       console.log('url returned from function', uploadResponse.secure_url)
       next();
     } else {
