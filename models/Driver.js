@@ -17,7 +17,7 @@ const driverSchema = new mongoose.Schema({
     {
       rideId: { type: mongoose.Schema.Types.ObjectId, ref: 'Ride' },
       status: { type: String, enum: ['inProgress', 'completed', 'canceled', 'awaitingAcceptance'] }, 
-      startTime: { type: Date }, // Track when each ride started
+      startTime: { type: Date }, 
       endTime: { type: Date },
     },
   ],
