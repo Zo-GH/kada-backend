@@ -5,7 +5,7 @@ const locationSchema = require('./Location')
 const passengerSchema = new mongoose.Schema({
   location: {
     type: locationSchema,
-  },
+  },  
   rideHistory: [
     {
       rideId: { type: mongoose.Schema.Types.ObjectId, ref: 'Ride' },

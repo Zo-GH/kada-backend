@@ -89,10 +89,30 @@ const deletePassenger = async (req, res, next) => {
   }
 };
 
+const googleLogin = async (req, res) => {
+  try {
+    const { googleToken } = req.body
+    if (!googleToken) {
+      return res.status(400).json({ message: 'Token is required' })
+    }
+
+    const { token, user } = await PassengerService.googleAuth(googleToken)
+
+    res.status(200).json({
+      message: 'Login successful',
+      token,
+      user
+    })
+  } catch (error) {
+    res.status(401).json({ message: error.message })
+  }
+}
+
 module.exports = {
   registerPassenger,
   getAllPassengers,
   getPassengerById,
   updatePassenger,
   deletePassenger,
+  googleLogin,
 };

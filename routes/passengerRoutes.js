@@ -8,5 +8,6 @@ passengerRouter.get('/', passengerController.getAllPassengers);
 passengerRouter.get('/:id', passengerController.getPassengerById);
 passengerRouter.patch('/:id',  passengerController.updatePassenger);
 passengerRouter.delete('/:id',  passengerController.deletePassenger);
+passengerRouter.post('/google-login', passengerController.googleLogin)
 
 module.exports = passengerRouter;

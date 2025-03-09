@@ -23,6 +23,7 @@ class ENVs {
   CLOUD_NAME = process.env.CLOUD_NAME;
   CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET
   CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY
+  GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
   TRAFFIC_MULTIPLIERS = {
     light: parseFloat(process.env.TRAFFIC_MULTIPLIERS_LIGHT),
     moderate: parseFloat(process.env.TRAFFIC_MULTIPLIERS_MODERATE),
