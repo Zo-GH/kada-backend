@@ -2,6 +2,7 @@
 const Driver = require('../models/Driver');
 const RideService = require('./RideServices'); 
 const bcryptjs = require('bcryptjs')
+const sendSMS = require('../utils/send-sms')
 
 
 const createDriver = async (data) => {
@@ -78,7 +79,6 @@ const updateDriverLocation = async (driverId, locationData) => {
 
 const toggleDriverAvailability = async (driverId, isOnline) => {
   const currentActivity = isOnline ? 'available' : 'unavailable';
-  console.log('driver id', driverId)
 
   return await Driver.findByIdAndUpdate(
     driverId,
@@ -92,16 +92,26 @@ const toggleDriverAvailability = async (driverId, isOnline) => {
 
 const toggleDriverApproval = async (driverId) => {
   try {
-    const driver = await Driver.findById(driverId);
+    const driver = await Driver.findById(driverId).select('phone name isApproved');
     if (!driver) {
       throw new Error('Driver not found');
     }
 
+    const newApprovalStatus = !driver.isApproved;
+
     const updatedDriver = await Driver.findByIdAndUpdate(
       driverId,
-      { isApproved: !driver.isApproved },
+      { isApproved: newApprovalStatus },
       { new: true }
     );
+    
+    const phoneNumber = driver.phone
+    const senderID = "ZO-GH"
+    const message = newApprovalStatus
+      ? `Hello ${driver.name}, You are now a verified Partner on the ZO-GH app. Welcome aboard!`
+      : `Hello ${driver.name}, Your approval has been revoked on the ZO-GH app due to policy violations. Contact support for more details.`; 
+
+    await sendSMS(phoneNumber, message, senderID)
 
     return updatedDriver;
   } catch (error) {

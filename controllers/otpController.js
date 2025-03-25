@@ -4,7 +4,7 @@ const Driver = require('../models/Driver');
 const Admin = require('../models/Admin');
 const bcryptjs = require('bcryptjs');
 
-const { sendOtpEmail } = require('../services/emailService');
+const { sendOtpEmail } = require('../utils/emailService');
 
 const otpStore = new Map();
 

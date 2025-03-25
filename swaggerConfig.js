@@ -11,7 +11,7 @@ const options = {
     },
     servers: [
       {
-        url: config.BASEURL || "https://kada-backend.onrender.com/",
+        url: config.BASEURL || "http://localhost:3000", 
         description: 'Development server',
       },
     ],
@@ -30,7 +30,7 @@ const options = {
       },
     ],
   },
-  apis: ['./swaggerRoutes/*.js'], // Ensure this path matches your route files
+  apis: ['./swaggerRoutes/*.js'], 
 };
 
 const swaggerSpec = swaggerJsdoc(options);

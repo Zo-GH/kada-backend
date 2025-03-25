@@ -24,6 +24,8 @@ class ENVs {
   CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET
   CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY
   GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+  AKESEL_SMS_URL= process.env.AKESEL_SMS_URL;
+  AKESEL_API_KEY = process.env.AKESEL_API_KEY;
   TRAFFIC_MULTIPLIERS = {
     light: parseFloat(process.env.TRAFFIC_MULTIPLIERS_LIGHT),
     moderate: parseFloat(process.env.TRAFFIC_MULTIPLIERS_MODERATE),

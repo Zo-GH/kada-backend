@@ -1,4 +1,3 @@
-
 const Rating = require('../models/Rating');
 const Driver = require('../models/Driver');
 const Ride = require('../models/Ride');
