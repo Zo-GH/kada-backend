@@ -24,7 +24,6 @@ const getCurrentUser = async (req, res, next) => {
 
     const token = bearerToken.split(' ')[1]; 
     const decodedToken = decodeToken(token); 
-    console.log('Decoded Token:', decodedToken); 
     const id = (decodedToken.id);
     const role = decodedToken.role;
  
